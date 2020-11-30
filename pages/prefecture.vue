@@ -1,23 +1,26 @@
 <template>
   <section class="container">
     <h1>Axios</h1>
-    <p>全国観光スポット情報2</p>
-    <p>base: {{ base }}</p>
-    <p><nuxt-link to="/prefecture">prefecture</nuxt-link></p>
-    <p><nuxt-link to="/menu">menu</nuxt-link></p>
-    <p><nuxt-link to="/greeting">greeting</nuxt-link></p>
+    <p>全国観光スポット情報</p>
+    <div
+      v-for="prefecture in $store.state.prefectures"
+      :key="prefecture.prefectureNo"
+    >
+      <div class="display-1 region-link">{{ prefecture.name }}</div>
+    </div>
   </section>
 </template>
 
 <script>
+import axios from "~/plugins/axios";
+
 export default {
-  data: function () {
-    return {
-      base: process.env.BASE_URL,
-    };
-  },
   async fetch({ store, params }) {
-    console.log("***process.env.BASE_URL=" + process.env.BASE_URL);
+    const resp = await axios.get("/api/prefectures");
+    store.commit("prefectures", resp.data._embedded.prefectureList);
+  },
+  data: function () {
+    return {};
   },
 };
 </script>
